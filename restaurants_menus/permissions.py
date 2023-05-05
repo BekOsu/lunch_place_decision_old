@@ -1,5 +1,5 @@
 from rest_framework import permissions
-from lunch_decision.core.models import RestaurantOwner, Employee
+from core.models import RestaurantOwner, Employee
 
 
 class IsRestaurantOwner(permissions.BasePermission):

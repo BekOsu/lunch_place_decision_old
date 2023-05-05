@@ -1,5 +1,5 @@
 from django.db import models
-from lunch_decision.core.models import RestaurantOwner
+from core.models import RestaurantOwner
 
 
 class Restaurant(models.Model):

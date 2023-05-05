@@ -1,6 +1,6 @@
 from django.db import models
-from lunch_decision.core.models import Employee
-from lunch_decision.restaurants_menus.models import Menu
+from core.models import Employee
+from restaurants_menus.models import Menu
 
 
 class Vote(models.Model):
