@@ -10,6 +10,9 @@ class Profile(models.Model):
     class Meta:
         abstract = True
 
+    def __str__(self):
+        return self.user.username
+
 
 class RestaurantOwner(Profile):
     pass
