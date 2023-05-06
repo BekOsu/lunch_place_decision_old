@@ -3,17 +3,6 @@ from .models import RestaurantOwner, Employee, Profile
 from django.contrib.auth.models import User
 
 
-class ProfileSerializer(serializers.ModelSerializer):
-    user = serializers.StringRelatedField(read_only=True)
-    user_email = serializers.EmailField(source='user.email', read_only=True)
-    user_first_name = serializers.CharField(source='user.first_name', read_only=True)
-
-    class Meta:
-        model = Profile
-        fields = ['id', 'user', 'user_email', 'user_first_name', 'is_restaurant_owner', 'is_employee']
-        abstract = True
-
-
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
@@ -28,6 +17,17 @@ class UserSerializer(serializers.ModelSerializer):
             first_name=validated_data.get('first_name', ''),
         )
         return user
+
+
+class ProfileSerializer(serializers.ModelSerializer):
+    user = serializers.StringRelatedField(read_only=True)
+    user_email = serializers.EmailField(source='user.email', read_only=True)
+    user_first_name = serializers.CharField(source='user.first_name', read_only=True)
+
+    class Meta:
+        model = Profile
+        fields = ['id', 'user', 'user_email', 'user_first_name', 'is_restaurant_owner', 'is_employee']
+        abstract = True
 
 
 class RestaurantOwnerSerializer(ProfileSerializer):
