@@ -2,13 +2,16 @@ from rest_framework import generics
 from .models import Restaurant, Menu
 from .serializers import RestaurantSerializer, MenuSerializer
 from .permissions import IsRestaurantOwner, IsEmployee
+from rest_framework.permissions import IsAuthenticated
 from datetime import date
 
 
-class RestaurantCreateView(generics.CreateAPIView):
-    queryset = Restaurant.objects.all()
+class RestaurantCreateView(generics.ListCreateAPIView):
     serializer_class = RestaurantSerializer
-    permission_classes = [IsRestaurantOwner]
+    permission_classes = [IsAuthenticated, IsRestaurantOwner]
+
+    def get_queryset(self):
+        return Restaurant.objects.filter(owner=self.request.user.restaurantowner)
 
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user.restaurantowner)
