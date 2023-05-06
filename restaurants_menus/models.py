@@ -8,7 +8,7 @@ class Restaurant(models.Model):
     owner = models.ForeignKey(RestaurantOwner, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.name
+        return "{} - {}".format(self.name, self.owner)
 
 
 class Menu(models.Model):

@@ -17,19 +17,19 @@ class RestaurantCreateView(generics.ListCreateAPIView):
         serializer.save(owner=self.request.user.restaurantowner)
 
 
-class RestaurantUpdateView(generics.UpdateAPIView):
-    queryset = Restaurant.objects.all()
+class RestaurantUpdateView(generics.RetrieveUpdateAPIView):
     serializer_class = RestaurantSerializer
-    permission_classes = [IsRestaurantOwner]
+    permission_classes = [IsAuthenticated, IsRestaurantOwner]
+    queryset = Restaurant.objects.all()
 
-    def perform_update(self, serializer):
-        serializer.save(owner=self.request.user.restaurantowner)
+    def get_queryset(self):
+        return Restaurant.objects.filter(owner=self.request.user.restaurantowner)
 
 
 class MenuCreateView(generics.CreateAPIView):
     queryset = Menu.objects.all()
     serializer_class = MenuSerializer
-    permission_classes = [IsRestaurantOwner]
+    permission_classes = [IsAuthenticated, IsRestaurantOwner]
 
     def perform_create(self, serializer):
         restaurant = self.request.user.restaurantowner.restaurant_set.first()
