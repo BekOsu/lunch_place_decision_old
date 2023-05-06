@@ -6,7 +6,7 @@ from rest_framework.permissions import IsAuthenticated
 from datetime import date
 
 
-class RestaurantCreateView(generics.ListCreateAPIView):
+class RestaurantAPIView(generics.ListCreateAPIView):
     serializer_class = RestaurantSerializer
     permission_classes = [IsAuthenticated, IsRestaurantOwner]
 
@@ -26,20 +26,34 @@ class RestaurantDetailView(generics.RetrieveUpdateDestroyAPIView):
         return Restaurant.objects.filter(owner=self.request.user.restaurantowner)
 
 
-class MenuCreateView(generics.CreateAPIView):
+class MenuAPIView(generics.ListCreateAPIView):
     queryset = Menu.objects.all()
     serializer_class = MenuSerializer
     permission_classes = [IsAuthenticated, IsRestaurantOwner]
 
+    def get_queryset(self):
+        owner = self.request.user.restaurantowner
+        return Menu.objects.filter(restaurant__owner=owner)
+
     def perform_create(self, serializer):
-        restaurant = self.request.user.restaurantowner.restaurant_set.first()
-        serializer.save(restaurant=restaurant)
+        owner = self.request.user.restaurantowner
+        restaurant = self.request.data.get('restaurant')
+        owned_restaurant = owner.restaurant_set.filter(id=restaurant)
+
+        if owned_restaurant.exists():
+            serializer.save(restaurant=owned_restaurant.first())
+        else:
+            raise serializer.ValidationError("You can only create menus for the restaurants you own.")
 
 
 class MenuDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Menu.objects.all()
     serializer_class = MenuSerializer
     permission_classes = [IsAuthenticated, IsRestaurantOwner]
+
+    def get_queryset(self):
+        owner = self.request.user.restaurantowner
+        return Menu.objects.filter(restaurant__owner=owner)
 
 
 class CurrentDayMenuView(generics.ListAPIView):
