@@ -17,7 +17,7 @@ class RestaurantCreateView(generics.ListCreateAPIView):
         serializer.save(owner=self.request.user.restaurantowner)
 
 
-class RestaurantUpdateView(generics.RetrieveUpdateAPIView):
+class RestaurantDetailView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = RestaurantSerializer
     permission_classes = [IsAuthenticated, IsRestaurantOwner]
     queryset = Restaurant.objects.all()
@@ -39,7 +39,7 @@ class MenuCreateView(generics.CreateAPIView):
 class MenuDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Menu.objects.all()
     serializer_class = MenuSerializer
-    permission_classes = [IsRestaurantOwner]
+    permission_classes = [IsAuthenticated, IsRestaurantOwner]
 
 
 class CurrentDayMenuView(generics.ListAPIView):

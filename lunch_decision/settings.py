@@ -41,7 +41,7 @@ INSTALLED_APPS = [
     # app
     'core',
     'employees',
-    'restaurants_menus',
+    'restaurants',
     'voting',
 
     # packages

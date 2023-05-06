@@ -22,7 +22,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('core/', include('core.urls')),
     # path('employees/', include('employees.urls')),
-    path('restaurants_menus/', include('restaurants_menus.urls')),
+    path('restaurants/', include('restaurants.urls')),
     path('voting/', include('voting.urls')),
 
     # Open API
