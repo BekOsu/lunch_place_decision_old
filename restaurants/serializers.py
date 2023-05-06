@@ -11,7 +11,10 @@ class RestaurantSerializer(serializers.ModelSerializer):
 
 
 class MenuSerializer(serializers.ModelSerializer):
+    restaurant_name = serializers.StringRelatedField(source='restaurant.name', read_only=True)
+
     class Meta:
         model = Menu
-        fields = '__all__'
+        fields = ['id', 'restaurant_name', 'date', 'items', 'created_at']
+        read_only_fields = ['created_at']
 

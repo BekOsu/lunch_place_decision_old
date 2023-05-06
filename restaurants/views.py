@@ -2,6 +2,7 @@ from rest_framework import generics
 from .models import Restaurant, Menu
 from .serializers import RestaurantSerializer, MenuSerializer
 from .permissions import IsRestaurantOwner, IsEmployee
+from rest_framework import serializers
 from rest_framework.permissions import IsAuthenticated
 from datetime import date
 
@@ -37,13 +38,12 @@ class MenuAPIView(generics.ListCreateAPIView):
 
     def perform_create(self, serializer):
         owner = self.request.user.restaurantowner
-        restaurant = self.request.data.get('restaurant')
-        owned_restaurant = owner.restaurant_set.filter(id=restaurant)
+        restaurant = owner.restaurant_set.first()
 
-        if owned_restaurant.exists():
-            serializer.save(restaurant=owned_restaurant.first())
+        if restaurant:
+            serializer.save(restaurant=restaurant)
         else:
-            raise serializer.ValidationError("You can only create menus for the restaurants you own.")
+            raise serializers.ValidationError("You must own a restaurant to create a menu.")
 
 
 class MenuDetail(generics.RetrieveUpdateDestroyAPIView):
@@ -58,7 +58,7 @@ class MenuDetail(generics.RetrieveUpdateDestroyAPIView):
 
 class CurrentDayMenuView(generics.ListAPIView):
     serializer_class = MenuSerializer
-    permission_classes = [IsEmployee]
+    permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
         today_menus = Menu.objects.filter(date=date.today())
