@@ -24,6 +24,7 @@ urlpatterns = [
     # path('employees/', include('employees.urls')),
     path('restaurants_menus/', include('restaurants_menus.urls')),
     path('voting/', include('voting.urls')),
+
     # Open API
     re_path(
         r"^$", schema_view.with_ui("swagger", cache_timeout=0), name="schema-swagger-ui"

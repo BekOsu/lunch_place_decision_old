@@ -18,5 +18,5 @@ class Menu(models.Model):
     points = models.PositiveIntegerField(default=0)
 
     def __str__(self):
-        return f"{self.restaurant.name} - {self.date}"
+        return f"{self.restaurant.name} : {self.items} - {self.date}"
 
