@@ -1,14 +1,26 @@
 from rest_framework import generics
-from .models import Vote
-from .serializers import VoteSerializer
-from rest_framework.permissions import IsAuthenticated
-from rest_framework.response import Response
-from .permissions import IsEmployee
-from restaurants.models import Menu
-from rest_framework import serializers, status
-from django.utils import timezone
 from django.db import models
+from .models import Vote, Employee
+from .serializers import VoteSerializer
+from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.response import Response
+from restaurants.models import Menu
+from rest_framework import status
+from django.utils import timezone
 from restaurants.serializers import MenuSerializer
+from .serializers import EmployeeSerializer
+from core.permissions import IsEmployee
+
+
+class EmployeeList(generics.ListCreateAPIView):
+    serializer_class = EmployeeSerializer
+    queryset = Employee.objects.all()
+    permission_classes = [AllowAny]
+
+
+class EmployeeDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Employee.objects.all()
+    serializer_class = EmployeeSerializer
 
 
 class VoteCreateView(generics.CreateAPIView):

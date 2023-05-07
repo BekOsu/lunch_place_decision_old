@@ -1,5 +1,12 @@
 from django.db import models
-from core.models import RestaurantOwner
+from core.models import Profile
+
+
+class RestaurantOwner(Profile):
+
+    def delete(self, *args, **kwargs):
+        self.user.delete()
+        super().delete(*args, **kwargs)
 
 
 class Restaurant(models.Model):

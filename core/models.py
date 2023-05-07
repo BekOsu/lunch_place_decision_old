@@ -14,15 +14,4 @@ class Profile(models.Model):
         return self.user.username
 
 
-class RestaurantOwner(Profile):
 
-    def delete(self, *args, **kwargs):
-        self.user.delete()
-        super().delete(*args, **kwargs)
-
-
-class Employee(Profile):
-
-    def delete(self, *args, **kwargs):
-        self.user.delete()
-        super().delete(*args, **kwargs)

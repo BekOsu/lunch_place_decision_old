@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import RestaurantOwner, Employee, Profile
+from .models import Profile
 from django.contrib.auth.models import User
 
 
@@ -29,41 +29,3 @@ class ProfileSerializer(serializers.ModelSerializer):
         model = Profile
         fields = ['id', 'user', 'user_name', 'user_email', 'user_first_name']
         abstract = True
-
-
-class RestaurantOwnerSerializer(ProfileSerializer):
-    user = UserSerializer()
-
-    class Meta(ProfileSerializer.Meta):
-        model = RestaurantOwner
-        fields = ProfileSerializer.Meta.fields + ['user', 'is_restaurant_owner']
-        read_only_fields = ['id', 'is_restaurant_owner']
-
-    def create(self, validated_data):
-        user_data = validated_data.pop('user')
-        user_serializer = UserSerializer(data=user_data)
-        if user_serializer.is_valid():
-            user = user_serializer.save()
-            restaurant_owner = RestaurantOwner.objects.create(user=user, is_restaurant_owner=True)
-            return restaurant_owner
-        else:
-            raise serializers.ValidationError(user_serializer.errors)
-
-
-class EmployeeSerializer(ProfileSerializer):
-    user = UserSerializer()
-
-    class Meta(ProfileSerializer.Meta):
-        model = Employee
-        fields = ProfileSerializer.Meta.fields + ['user', 'is_employee']
-        read_only_fields = ['id', 'is_employee']
-
-    def create(self, validated_data):
-        user_data = validated_data.pop('user')
-        user_serializer = UserSerializer(data=user_data)
-        if user_serializer.is_valid():
-            user = user_serializer.save()
-            employee = Employee.objects.create(user=user, is_employee=True)
-            return employee
-        else:
-            raise serializers.ValidationError(user_serializer.errors)

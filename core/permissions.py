@@ -1,5 +1,6 @@
 from rest_framework import permissions
-from core.models import RestaurantOwner, Employee
+from restaurants.models import RestaurantOwner
+from employee.models import Employee
 
 
 class IsRestaurantOwner(permissions.BasePermission):

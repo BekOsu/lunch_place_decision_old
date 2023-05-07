@@ -1,6 +1,15 @@
 from django.db import models
-from core.models import Employee
 from restaurants.models import Menu
+from core.models import Profile
+
+
+class Employee(Profile):
+    company = models.CharField(max_length=255)
+    department = models.CharField(max_length=255)
+
+    def delete(self, *args, **kwargs):
+        self.user.delete()
+        super().delete(*args, **kwargs)
 
 
 class Vote(models.Model):

@@ -1,10 +1,22 @@
 from rest_framework import generics
-from .models import Restaurant, Menu
+from .models import RestaurantOwner, Restaurant, Menu
 from .serializers import RestaurantSerializer, MenuSerializer
-from .permissions import IsRestaurantOwner
 from rest_framework import serializers
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from datetime import date
+from .serializers import RestaurantOwnerSerializer
+from core.permissions import IsRestaurantOwner
+
+
+class RestaurantOwnerList(generics.ListCreateAPIView):
+    serializer_class = RestaurantOwnerSerializer
+    queryset = RestaurantOwner.objects.all()
+    permission_classes = [AllowAny]
+
+
+class RestaurantOwnerDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = RestaurantOwner.objects.all()
+    serializer_class = RestaurantOwnerSerializer
 
 
 class RestaurantAPIView(generics.ListCreateAPIView):

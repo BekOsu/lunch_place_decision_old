@@ -1,26 +1,10 @@
-from rest_framework import generics
-from .serializers import RestaurantOwnerSerializer, EmployeeSerializer
-from .models import RestaurantOwner, Employee
+from rest_framework.generics import ListCreateAPIView
 from rest_framework.permissions import AllowAny
+from .models import User
+from .serializers import UserSerializer
 
 
-class RestaurantOwnerList(generics.ListCreateAPIView):
-    serializer_class = RestaurantOwnerSerializer
-    queryset = RestaurantOwner.objects.all()
+class UserListCreateView(ListCreateAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
     permission_classes = [AllowAny]
-
-
-class RestaurantOwnerDetail(generics.RetrieveUpdateDestroyAPIView):
-    queryset = RestaurantOwner.objects.all()
-    serializer_class = RestaurantOwnerSerializer
-
-
-class EmployeeList(generics.ListCreateAPIView):
-    serializer_class = EmployeeSerializer
-    queryset = Employee.objects.all()
-    permission_classes = [AllowAny]
-
-
-class EmployeeDetail(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Employee.objects.all()
-    serializer_class = EmployeeSerializer
