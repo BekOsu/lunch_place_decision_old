@@ -4,8 +4,8 @@ from core.models import RestaurantOwner, Employee
 
 class IsRestaurantOwner(permissions.BasePermission):
     def has_permission(self, request, view):
-        if request.user.is_authenticated:
-            return RestaurantOwner.objects.filter(user=request.user).exists()
+        if request.user.is_authenticated and RestaurantOwner.objects.filter(user=request.user).exists():
+            return True
         return False
 
 

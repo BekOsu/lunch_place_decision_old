@@ -15,10 +15,14 @@ class Profile(models.Model):
 
 
 class RestaurantOwner(Profile):
-    pass
-    # Add any other fields specific to restaurant owners
+
+    def delete(self, *args, **kwargs):
+        self.user.delete()
+        super().delete(*args, **kwargs)
 
 
 class Employee(Profile):
-    pass
-    # Add any other fields specific to employees
+
+    def delete(self, *args, **kwargs):
+        self.user.delete()
+        super().delete(*args, **kwargs)

@@ -40,9 +40,8 @@ INSTALLED_APPS = [
 
     # app
     'core',
-    'employees',
     'restaurants',
-    'voting',
+    'employee',
 
     # packages
     'rest_framework',

@@ -1,7 +1,7 @@
 from rest_framework import generics
 from .models import Restaurant, Menu
 from .serializers import RestaurantSerializer, MenuSerializer
-from .permissions import IsRestaurantOwner, IsEmployee
+from .permissions import IsRestaurantOwner
 from rest_framework import serializers
 from rest_framework.permissions import IsAuthenticated
 from datetime import date

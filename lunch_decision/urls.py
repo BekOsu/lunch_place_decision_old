@@ -23,7 +23,7 @@ urlpatterns = [
     path('core/', include('core.urls')),
     # path('employees/', include('employees.urls')),
     path('restaurants/', include('restaurants.urls')),
-    path('voting/', include('voting.urls')),
+    path('employee/', include('employee.urls')),
 
     # Open API
     re_path(
