@@ -22,7 +22,8 @@ class EmployeeSerializer(ProfileSerializer):
         user_serializer = UserSerializer(data=user_data)
         if user_serializer.is_valid():
             user = user_serializer.save()
-            employee = Employee.objects.create(user=user, is_employee=True, company=company, department=department)
+            employee = Employee.objects.create(user=user, is_employee=True, is_restaurant_owner=False,
+                                               company=company, department=department)
             return employee
         else:
             raise serializers.ValidationError(user_serializer.errors)

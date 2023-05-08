@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import RestaurantOwner, Restaurant, Menu
+from .models import RestaurantOwner, Restaurant
 from UserAuth.serializers import ProfileSerializer, UserSerializer
 
 
@@ -16,7 +16,7 @@ class RestaurantOwnerSerializer(ProfileSerializer):
         user_serializer = UserSerializer(data=user_data)
         if user_serializer.is_valid():
             user = user_serializer.save()
-            restaurant_owner = RestaurantOwner.objects.create(user=user, is_restaurant_owner=True)
+            restaurant_owner = RestaurantOwner.objects.create(user=user, is_restaurant_owner=True,  is_employee=False)
             return restaurant_owner
         else:
             raise serializers.ValidationError(user_serializer.errors)
@@ -28,13 +28,4 @@ class RestaurantSerializer(serializers.ModelSerializer):
     class Meta:
         model = Restaurant
         fields = ['id', 'name', 'address', 'owner_name']
-
-
-class MenuSerializer(serializers.ModelSerializer):
-    restaurant_name = serializers.StringRelatedField(source='restaurant.name', read_only=True)
-
-    class Meta:
-        model = Menu
-        fields = ['id', 'restaurant_name', 'date', 'items', 'created_at']
-        read_only_fields = ['created_at']
 

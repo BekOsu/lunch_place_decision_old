@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'UserAuth',
     'restaurants',
     'employee',
+    'menus',
 
     # packages
     'rest_framework',

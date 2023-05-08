@@ -20,9 +20,11 @@ schema_view = get_schema_view(
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('UserAuth/', include('UserAuth.urls')),
+    path('api-auth/', include('rest_framework.urls')),
+    path('user/', include('UserAuth.urls')),
+    path('employees/', include('employee.urls')),
     path('restaurants/', include('restaurants.urls')),
-    path('employee/', include('employee.urls')),
+    path('menus/', include('menus.urls')),
 
     # Open API
     re_path(
