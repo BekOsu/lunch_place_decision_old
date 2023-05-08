@@ -32,7 +32,7 @@ class VoteSerializer(serializers.ModelSerializer):
     class Meta:
         model = Vote
         fields = ['employee', 'menu', 'points', 'created_at']
-        read_only_fields = ['created_at']
+        read_only_fields = ['created_at', 'employee', 'points']
 
     def validate_points(self, value):
         if value < 1 or value > 3:
