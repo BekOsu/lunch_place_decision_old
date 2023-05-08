@@ -49,6 +49,9 @@ class VoteList(generics.CreateAPIView):
             return Response("Invalid API version", status=status.HTTP_400_BAD_REQUEST)
 
     def create_vote_v1(self, request):
+        data = request.data
+        if isinstance(data, list):
+            return Response("Multiple menu selections are not allowed in API v1", status=status.HTTP_400_BAD_REQUEST)
         menu_id = request.data.get('menu')
 
         if menu_id is None:
