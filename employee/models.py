@@ -1,6 +1,6 @@
 from django.db import models
 from restaurants.models import Menu
-from core.models import Profile
+from UserAuth.models import Profile
 
 
 class Employee(Profile):

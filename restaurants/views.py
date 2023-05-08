@@ -5,7 +5,7 @@ from rest_framework import serializers
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from datetime import date
 from .serializers import RestaurantOwnerSerializer
-from core.permissions import IsRestaurantOwner
+from UserAuth.permissions import IsRestaurantOwner
 
 
 class RestaurantOwnerList(generics.ListCreateAPIView):

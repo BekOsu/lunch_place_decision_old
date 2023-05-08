@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from .models import RestaurantOwner, Restaurant, Menu
-from core.serializers import ProfileSerializer, UserSerializer
+from UserAuth.serializers import ProfileSerializer, UserSerializer
 
 
 class RestaurantOwnerSerializer(ProfileSerializer):

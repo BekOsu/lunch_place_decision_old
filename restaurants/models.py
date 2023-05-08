@@ -1,5 +1,5 @@
 from django.db import models
-from core.models import Profile
+from UserAuth.models import Profile
 
 
 class RestaurantOwner(Profile):

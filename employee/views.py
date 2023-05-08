@@ -5,7 +5,7 @@ from .serializers import EmployeeSerializer, VoteSerializer
 from restaurants.models import Menu
 from rest_framework.response import Response
 from datetime import date
-from core.permissions import IsEmployee
+from UserAuth.permissions import IsEmployee
 
 
 class EmployeeList(generics.ListCreateAPIView):

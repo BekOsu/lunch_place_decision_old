@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from .models import Vote, Employee
-from core.serializers import UserSerializer, ProfileSerializer
+from UserAuth.serializers import UserSerializer, ProfileSerializer
 
 
 class EmployeeSerializer(ProfileSerializer):

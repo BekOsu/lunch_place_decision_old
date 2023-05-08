@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     # app
-    'core',
+    'UserAuth',
     'restaurants',
     'employee',
 
