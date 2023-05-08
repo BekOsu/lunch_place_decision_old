@@ -36,7 +36,11 @@ class RestaurantDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Restaurant.objects.all()
 
     def get_queryset(self):
-        return Restaurant.objects.filter(owner=self.request.user.restaurantowner)
+        if self.request.user.is_authenticated:
+            owner = self.request.user.restaurantowner
+            return Restaurant.objects.filter(owner=owner)
+        else:
+            return Restaurant.objects.none()
 
 
 class MenuAPIView(generics.ListCreateAPIView):
@@ -64,8 +68,15 @@ class MenuDetail(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [IsAuthenticated, IsRestaurantOwner]
 
     def get_queryset(self):
-        owner = self.request.user.restaurantowner
-        return Menu.objects.filter(restaurant__owner=owner)
+        queryset = Menu.objects.all()
+
+        if self.request.user.is_authenticated:
+            owner = self.request.user.restaurantowner
+            queryset = queryset.filter(restaurant__owner=owner)
+        else:
+            queryset = queryset.none()
+
+        return queryset
 
 
 class CurrentDayMenuView(generics.ListAPIView):
