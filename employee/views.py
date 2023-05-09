@@ -63,6 +63,8 @@ class VoteList(generics.CreateAPIView):
             return Response("Invalid menu selection", status=status.HTTP_400_BAD_REQUEST)
 
         employee = request.user.employee
+        print(f"menu_id: {menu_id}")
+        print(f"menu: {menu}")
         vote, created = Vote.objects.update_or_create(
             employee=employee, created_at__date=date.today(), points=3,
             defaults={'menu': menu}
@@ -119,13 +121,19 @@ class TodayTopMenus(generics.ListAPIView):
     def get_top_menu_v1(self, request):
         today_votes = Vote.objects.filter(created_at__date=date.today())
         top_menu = today_votes.annotate(total_points=Sum('points')).order_by('-total_points').first()
-        serializer = self.get_serializer(top_menu.menu)
-        return Response(serializer.data)
+        if top_menu:
+            serializer = self.get_serializer(top_menu.menu)
+            return Response(serializer.data)
+        else:
+            return Response("No votes for the day yet", status=status.HTTP_404_NOT_FOUND)
 
     def get_top_menus_v2(self, request):
         today_votes = Vote.objects.filter(created_at__date=date.today())
         top_menus = today_votes.values('menu').annotate(total_points=Sum('points')).order_by('-total_points')[:3]
         top_menu_ids = [menu['menu'] for menu in top_menus]
         queryset = Menu.objects.filter(id__in=top_menu_ids)
-        serializer = self.get_serializer(queryset, many=True)
-        return Response(serializer.data)
+        if queryset:
+            serializer = self.get_serializer(queryset.menu, many=True)
+            return Response(serializer.data)
+        else:
+            return Response("No votes for the day yet", status=status.HTTP_404_NOT_FOUND)
