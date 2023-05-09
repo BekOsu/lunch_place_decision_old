@@ -12,13 +12,13 @@ class MenuViewSet(viewsets.ModelViewSet):
     queryset = Menu.objects.all()
     serializer_class = MenuSerializer
     permission_classes = [IsRestaurantOwner]
+    filterset_class = MenuFilter
 
 
 class MenuItemViewSet(viewsets.ModelViewSet):
     queryset = MenuItem.objects.all()
     serializer_class = MenuItemSerializer
     permission_classes = [IsRestaurantOwner]
-    filterset_class = MenuFilter
 
 
 class CurrentDayMenuView(generics.ListAPIView):
