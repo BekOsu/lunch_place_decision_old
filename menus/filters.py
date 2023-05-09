@@ -4,8 +4,9 @@ from django.utils import timezone
 
 
 class MenuFilter(filters.FilterSet):
-    date = filters.DateFilter(field_name="date", lookup_expr='exact', default=timezone.now().date())
+    date = filters.DateFilter(field_name="date", lookup_expr='exact')
 
     class Meta:
         model = Menu
-        fields = ['date']
+        fields = {'date': ['exact'],
+}
