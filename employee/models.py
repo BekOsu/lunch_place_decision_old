@@ -1,5 +1,6 @@
 from django.db import models
 from UserAuth.models import Profile
+
 from menus.models import Menu
 
 
@@ -20,3 +21,6 @@ class Vote(models.Model):
 
     def __str__(self):
         return f"{self.employee} voted {self.points} points for {self.menu}"
+
+    class Meta:
+        unique_together = ('employee', 'menu')
