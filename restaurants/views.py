@@ -19,7 +19,7 @@ class RestaurantOwnerDetail(generics.RetrieveUpdateDestroyAPIView):
 
 class RestaurantAPIView(generics.ListCreateAPIView):
     serializer_class = RestaurantSerializer
-    permission_classes = [IsAuthenticated, IsRestaurantOwner]
+    permission_classes = [IsRestaurantOwner]
 
     def get_queryset(self):
         return Restaurant.objects.filter(owner=self.request.user.restaurantowner)

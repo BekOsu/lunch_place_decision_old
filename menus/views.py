@@ -1,72 +1,32 @@
 from rest_framework.permissions import IsAuthenticated
-from .models import Menu
-from .serializers import MenuSerializer
+from .filters import MenuFilter
+from .models import Menu, MenuItem
+from .serializers import MenuSerializer, MenuItemSerializer
 from datetime import date
-from rest_framework import generics, serializers
+from rest_framework import generics, viewsets
 from UserAuth.permissions import IsRestaurantOwner
 from UserAuth.permissions import IsEmployee
 
 
-class MenuAPIView(generics.ListCreateAPIView):
+class MenuViewSet(viewsets.ModelViewSet):
     queryset = Menu.objects.all()
     serializer_class = MenuSerializer
-    permission_classes = [IsAuthenticated, IsRestaurantOwner]
-
-    def get_queryset(self):
-        owner = self.request.user.restaurantowner
-        return Menu.objects.filter(restaurant__owner=owner)
-
-    def perform_create(self, serializer):
-        owner = self.request.user.restaurantowner
-        restaurant = owner.restaurant_set.first()
-
-        if restaurant:
-            serializer.save(restaurant=restaurant)
-        else:
-            raise serializers.ValidationError("You must own a restaurant to create a menu.")
+    permission_classes = [IsRestaurantOwner]
 
 
-class MenuDetail(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Menu.objects.all()
-    serializer_class = MenuSerializer
-    permission_classes = [IsAuthenticated, IsRestaurantOwner]
-
-    def get_queryset(self):
-        queryset = Menu.objects.all()
-
-        if self.request.user.is_authenticated:
-            owner = self.request.user.restaurantowner
-            queryset = queryset.filter(restaurant__owner=owner)
-        else:
-            queryset = queryset.none()
-
-        return queryset
-
-
-# class CurrentDayMenuView(generics.ListAPIView):
-#     serializer_class = MenuSerializer
-#     permission_classes = [IsAuthenticated, IsRestaurantOwner]
-#
-#     def get_queryset(self):
-#         if self.request.user.is_authenticated:
-#             owner = self.request.user.restaurantowner
-#             today_menus = Menu.objects.filter(date=date.today(), restaurant__owner=owner)
-#             return today_menus
-#         else:
-#             return Menu.objects.none()
+class MenuItemViewSet(viewsets.ModelViewSet):
+    queryset = MenuItem.objects.all()
+    serializer_class = MenuItemSerializer
+    permission_classes = [IsRestaurantOwner]
+    filterset_class = MenuFilter
 
 
 class CurrentDayMenuView(generics.ListAPIView):
     serializer_class = MenuSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsEmployee]
 
     def get_queryset(self):
-        if self.request.user.is_authenticated:
-            if IsRestaurantOwner().has_permission(self.request, self):
-                owner = self.request.user.restaurantowner
-                today_menus = Menu.objects.filter(date=date.today(), restaurant__owner=owner)
-                return today_menus
-            elif IsEmployee().has_permission(self.request, self):
-                today_menus = Menu.objects.filter(date=date.today())
-                return today_menus
+        if IsEmployee().has_permission(self.request, self):
+            today_menus = Menu.objects.filter(date=date.today())
+            return today_menus
         return Menu.objects.none()
